@@ -1,0 +1,41 @@
+@import "~@/config.less";
+
+@main-height: 64px;
+
+.root {
+  width: 100%;
+  height: @main-height;
+  .clearfix;
+
+  .right {
+    height: 100%;
+    float: right;
+    font-size: 0;
+    padding-right: 16px;
+
+    .right-item() {
+      display: inline-block;
+      padding: 0 12px;
+      line-height: @main-height;
+      font-size: 14px;
+    }
+
+    .username {
+      .right-item;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #e6f7ff;
+      }
+    }
+
+    .logout {
+      .right-item;
+
+      .icon {
+        padding: 6px 3px;
+        cursor: pointer;
+      }
+    }
+  }
+}

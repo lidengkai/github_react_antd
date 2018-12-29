@@ -1,0 +1,11 @@
+_Store
+*/.DS_Store
+.idea
+node_modules/
+dist/
+
+/temp/*
+!/temp/.gitkeep
+
+/public/static/*/*
+!/public/static/*/.gitkeep

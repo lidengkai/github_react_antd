@@ -1,0 +1,23 @@
+{
+  "name": "github_react_antd_mock",
+  "version": "0.1.0",
+  "author": "lidengkai <lidengkai9487@163.com>",
+  "private": true,
+  "scripts": {
+    "start": "./node_modules/.bin/nodemon bin/www --config nodemon.json"
+  },
+  "dependencies": {
+    "formidable": "^1.2.2",
+    "koa": "^2.5.3",
+    "koa-bodyparser": "^4.2.1",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.0",
+    "koa-onerror": "^4.1.0",
+    "koa-router": "^7.4.0",
+    "koa-session": "^5.9.0",
+    "koa-static": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}

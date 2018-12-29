@@ -1,0 +1,26 @@
+@import "~@/config.less";
+
+.root {
+  :global(.ant-table-body) {
+    position: relative;
+
+    &::after {
+      content: ' ';
+      display: block;
+    }
+
+    >table {
+      position: absolute;
+      left: 0;
+      right: 0;
+    }
+  }
+}
+
+.height :global(.ant-table-body)::after {
+  height: 0;
+}
+
+.top :global(.ant-table-body)>table {
+  top: 0;
+}

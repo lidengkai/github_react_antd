@@ -1,0 +1,191 @@
+@import "~@/config.less";
+
+.box-default {
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  color: @theme;
+  border: 1px solid @theme;
+
+  &.active {
+    background-color: @theme;
+  }
+}
+
+.box-check {
+  .box-default;
+  cursor: pointer;
+
+  &::after {
+    content: ' ';
+    display: block;
+    border: solid #fff;
+    width: 6px;
+    height: 10px;
+    border-width: 2px;
+    margin: 2px auto 0;
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(45deg);
+  }
+}
+
+.box-num {
+  .box-default;
+  line-height: 16px;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+
+  &.active {
+    color: #fff;
+    background-color: @theme;
+  }
+}
+
+.box-arrow {
+  width: 18px;
+  height: 18px;
+  color: #E6E6E6;
+  line-height: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+
+  &.active {
+    color: @theme;
+  }
+
+  &::after {
+    content: '↓';
+    display: block;
+  }
+}
+
+.main {
+  max-width: 605px;
+  padding: 12px 12px 0;
+  .form-border;
+  border-radius: 2px;
+
+  .header {
+    width: 100%;
+    min-height: 32px;
+    line-height: 32px;
+
+    .left {
+      float: left;
+
+      >div {
+        padding: 0 3px;
+        float: left;
+      }
+
+      &::after {
+        content: ' ';
+        display: block;
+        clear: both;
+      }
+    }
+
+    .right {
+      float: right;
+
+      >div {
+        padding: 0 3px;
+        min-height: 18px;
+        float: left;
+      }
+
+      .box {
+        .box-default;
+        margin-top: 7px;
+        margin-left: 3px;
+      }
+
+      &::after {
+        content: ' ';
+        display: block;
+        clear: both;
+      }
+    }
+
+    &::after {
+      content: ' ';
+      display: block;
+      clear: both;
+    }
+  }
+
+  .content {
+    .left {
+      float: left;
+      padding: 32px 6px 12px 0;
+
+      .item {
+        line-height: 32px;
+        height: 32px;
+
+        >div {
+          float: left;
+          cursor: pointer;
+        }
+
+        .box {
+          .box-check;
+          margin-top: 7px;
+          margin-right: 3px;
+        }
+
+        &::after {
+          content: ' ';
+          display: block;
+          clear: both;
+        }
+      }
+    }
+
+    .right {
+      overflow: hidden;
+
+      .body {
+        width: 100%;
+        overflow: auto;
+        padding-bottom: 12px;
+
+        .item {
+          width: 510px;
+          line-height: 32px;
+          height: 32px;
+
+          .box {
+            float: left;
+            .box-num;
+            margin-top: 7px;
+            margin-left: 3px;
+          }
+
+          .arrow {
+            float: left;
+            .box-arrow;
+            margin-top: 7px;
+            margin-left: 3px;
+          }
+
+          &::after {
+            content: ' ';
+            display: block;
+            clear: both;
+          }
+        }
+      }
+    }
+
+    &::after {
+      content: ' ';
+      display: block;
+      clear: both;
+    }
+  }
+}

@@ -1,0 +1,61 @@
+@import "~@/config.less";
+
+.main {
+  .form-border;
+  border-radius: 2px;
+  padding: 6px 0;
+  background-color: #f7f7f7;
+
+  .search {
+    padding: 6px 12px;
+  }
+
+  .header {
+    .clearfix;
+    padding: 6px 6px;
+
+    .item {
+      width: 50%;
+      padding: 0 6px;
+      float: left;
+
+      .content {
+        .clearfix;
+        min-height: 30px;
+        padding: 0 12px;
+        background-color: #ffffff;
+        border-radius: 2px;
+
+        .left {
+          float: left;
+          line-height: 30px;
+        }
+
+        .right {
+          float: right;
+          line-height: 30px;
+        }
+      }
+    }
+  }
+
+  .tree {
+    .clearfix;
+    height: 300px;
+    padding: 6px 6px;
+
+    .item {
+      width: 50%;
+      height: 100%;
+      padding: 0 6px;
+      float: left;
+
+      .content {
+        height: 100%;
+        overflow: auto;
+        background-color: #ffffff;
+        border-radius: 2px;
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+@import "~@/config.less";
+
+.main {
+  position: relative;
+  overflow: hidden;
+  padding: 5px 0 5px 52px;
+  border-radius: 2px;
+  .form-border;
+
+  .left {
+    width: 52px;
+    height: 100%;
+    background-color: #f6f6f6;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .right {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .textarea {
+      border: none !important;
+      padding: 0 12px !important;
+      line-height: 22px !important;
+      resize: none;
+    }
+  }
+
+  .count {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    padding: 5px 0;
+    pointer-events: none;
+
+    .item {
+      position: relative;
+      padding-left: 52px;
+
+      .left {
+        width: 52px;
+        height: 100%;
+        line-height: 22px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding-right: 15px;
+        text-align: right;
+        .font-family('Helvetica Neue');
+      }
+
+      .right {
+        width: 100%;
+        min-height: 22px;
+        overflow: hidden;
+        padding: 0 12px;
+        line-height: 22px;
+        word-break: break-all;
+        visibility: hidden;
+      }
+    }
+  }
+}
