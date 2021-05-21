@@ -60,8 +60,5 @@ export interface LinkProps {
 
 // VirtualScroll
 export interface VirtualScrollProps extends TableProps {
-  /**
-   * @prop {number} dataSize 视图加载的数量，默认20个
-   */
-  dataSize?: number
+  rowHeight?: number | ((row?: any, index?: number) => number)
 }

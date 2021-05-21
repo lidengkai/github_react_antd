@@ -17,8 +17,8 @@ const getState: GetState<typeof NAME, StateInterface> = (key = NAME) => {
 export async function initPage() {
   store.dispatch(init())
   store.dispatch(commit({
-    csvTabs: ['分号.csv'],
-    csvList: [[]]
+    csvTabs: [],
+    csvList: []
   }))
 }
 

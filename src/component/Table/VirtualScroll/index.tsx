@@ -7,7 +7,6 @@ import styles from './style.less'
 import { VirtualScrollProps, TableColumnsInterface } from '../interface'
 
 const ANTD_TBODY_CLASS = 'ant-table-body'
-const LINE_HEIGHT = 48
 
 const VirtualScroll: FC<VirtualScrollProps> = (props) => {
   const {
@@ -15,7 +14,7 @@ const VirtualScroll: FC<VirtualScrollProps> = (props) => {
     pagination,
     dataSource,
     columns,
-    dataSize = 20,
+    rowHeight = 47,
     ...otherProps
   } = props
 
@@ -23,30 +22,10 @@ const VirtualScroll: FC<VirtualScrollProps> = (props) => {
   const [topClassName, setTopClassName] = useState<string>()
   const [heightCss, setHeightCss] = useState<string>('')
   const [topCss, setTopCss] = useState<string>('')
-  const [index, setIndex] = useState<number>(0)
-  const [renderedTime, setRenderedTime] = useState<number>(-1)
+  const [currentColumns, setCurrentColumns] = useState<any[]>([])
   const [currentDataSource, setCurrentDataSource] = useState<any[]>([])
-
-  const ref = useRef<HTMLDivElement>(null)
-
-  const currentColumns = useMemo(() => {
-    const currentColumns: TableColumnsInterface = []
-    if (columns instanceof Array) {
-      for (const column of columns) {
-        if (column) {
-          const item = { ...column }
-          const { render } = item
-          if (typeof render === 'function') {
-            item.render = (value, row, i) => {
-              return render(value, row, index + i)
-            }
-          }
-          currentColumns.push(item)
-        }
-      }
-    }
-    return currentColumns
-  }, [index, columns])
+  const [scrollTop, setScrollTop] = useState<number>(0)
+  const [clientHeight, setClientHeight] = useState<number>(0)
 
   const allDataSource = useMemo(() => {
     if (dataSource instanceof Array) {
@@ -55,78 +34,105 @@ const VirtualScroll: FC<VirtualScrollProps> = (props) => {
     return []
   }, [dataSource])
 
-  const currentDataSize = useMemo(() => {
-    return Number(dataSize) || 20
-  }, [dataSize])
+  const heightList = useMemo(() => {
+    const heightList = []
+    if (typeof rowHeight === 'function') {
+      for (let index = 0, l = allDataSource.length; index < l; index++) {
+        heightList.push(Number(rowHeight(allDataSource[index], index)) || 0)
+      }
+    } else {
+      for (let index = 0, l = allDataSource.length; index < l; index++) {
+        heightList.push(Number(rowHeight) || 0)
+      }
+    }
+    return heightList
+  }, [allDataSource, rowHeight])
+
+  const readHeightDiv = useMemo(() => {
+    const div = document.createElement('div')
+    div.className = styles.readHeight
+    document.body.appendChild(div)
+    return div
+  }, [])
 
   useEffect(() => {
-    const { current } = ref
-    if (current) {
-      current.addEventListener('scroll', (e) => {
-        const target = e.target as HTMLDivElement
-        if (target.classList.contains(ANTD_TBODY_CLASS)) {
-          const { scrollTop } = target
-          const index = Math.max(Math.round(scrollTop / LINE_HEIGHT) - 5, 0)
-          setIndex(index)
-        }
-      }, true)
+    readHeightDiv.style.height = typeof y === 'number' ? y + 'px' : y
+    setClientHeight(readHeightDiv.clientHeight)
+  }, [y])
+
+  useEffect(() => {
+    const listener = () => {
+      setClientHeight(readHeightDiv.clientHeight)
+    }
+    window.addEventListener('resize', listener, false)
+    return () => {
+      window.removeEventListener('resize', listener, false)
+      document.body.removeChild(readHeightDiv)
+    }
+  }, [])
+
+  const handlScroll = useCallback((e) => {
+    const target = e.target as HTMLDivElement
+    if (target.classList.contains(ANTD_TBODY_CLASS)) {
+      const { scrollTop } = target
+      setScrollTop(scrollTop)
     }
   }, [])
 
   useEffect(() => {
-    const { length } = allDataSource
-    const currentDataSource = allDataSource.slice(index, index + currentDataSize)
-    const height = length * LINE_HEIGHT
+    const size = heightList.length
+    let start = 0
+    let end = size
+    let top = 0
+    for (let index = 0; index < size; index++) {
+      if (top > scrollTop - 200) {
+        start = index
+        break
+      }
+      top += heightList[index]
+    }
+    let height = 0
+    for (let index = 0; index < size; index++) {
+      height += heightList[index]
+      if (height > clientHeight + scrollTop + 200) {
+        end = index + 1
+        break
+      }
+    }
+    height = 0
+    for (let index = 0; index < size; index++) {
+      height += heightList[index]
+    }
+    const currentColumns: TableColumnsInterface = []
+    if (columns instanceof Array) {
+      for (const column of columns) {
+        if (column) {
+          const item = { ...column }
+          const { render } = item
+          if (typeof render === 'function') {
+            item.render = (value, row, i) => {
+              return render(value, row, start + i)
+            }
+          }
+          currentColumns.push(item)
+        }
+      }
+    }
+    const currentDataSource = allDataSource.slice(start, end)
     const heightClassName = `${styles.height}-${height}`
     const heightCss = `.${styles.root}.${heightClassName} .${ANTD_TBODY_CLASS}::after{height: ${height}px;}`
-    const top = index * LINE_HEIGHT
     const topClassName = `${styles.top}-${top}`
     const topCss = `.${styles.root}.${topClassName} .${ANTD_TBODY_CLASS}>table{top: ${top}px;}`
+    setCurrentColumns(currentColumns)
+    setCurrentDataSource(currentDataSource)
     setHeightClassName(heightClassName)
     setHeightCss(heightCss)
     setTopClassName(topClassName)
     setTopCss(topCss)
-    setCurrentDataSource(currentDataSource)
-    setRenderedTime(Date.now())
-  }, [allDataSource, index, currentDataSize])
-
-  useEffect(() => {
-    const { length } = allDataSource
-    if (renderedTime < 0) {
-      return
-    }
-    if (index < Math.max(length - currentDataSize, 0)) {
-      return
-    }
-    const { current } = ref
-    if (!current) {
-      return
-    }
-    const container = current.getElementsByClassName(ANTD_TBODY_CLASS)[0]
-    if (!container) {
-      return
-    }
-    const table = container.firstElementChild
-    if (!table) {
-      return
-    }
-    if (length <= currentDataSize) {
-      const height = table.clientHeight
-      const heightClassName = `${styles.height}-${height}`
-      const heightCss = `.${styles.root}.${heightClassName} .${ANTD_TBODY_CLASS}::after{height: ${height}px;}`
-      setHeightClassName(heightClassName)
-      setHeightCss(heightCss)
-    } else {
-      const top = container.scrollHeight - table.clientHeight
-      const topClassName = `${styles.top}-${top}`
-      const topCss = `.${styles.root}.${topClassName} .${ANTD_TBODY_CLASS}>table{top: ${top}px;}`
-      setTopClassName(topClassName)
-      setTopCss(topCss)
-    }
-  }, [renderedTime])
+  }, [scrollTop, heightList, clientHeight, columns, allDataSource])
 
   return (
-    <div className={classnames(styles.root, heightClassName, topClassName)} ref={ref}>
+    <div className={classnames(styles.root, heightClassName, topClassName)} onScrollCapture={handlScroll}>
       <style>{heightCss}{topCss}</style>
       <Table y={y}
         pagination={false}

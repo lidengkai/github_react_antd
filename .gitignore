@@ -19,3 +19,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+/src/_temp/*
+!/src/_temp/.gitkeep

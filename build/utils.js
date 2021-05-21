@@ -62,6 +62,8 @@ module.exports.loaders = (options = {}) => {
       ]
     }, {
       test: /\.less$/,
+      include: /src/,
+      exclude: /node_modules/,
       use: [
         cssExtract ? MiniCssExtractPlugin.loader : 'style-loader',
         {
@@ -69,7 +71,8 @@ module.exports.loaders = (options = {}) => {
           options: {
             modules: {
               localIdentName: '[path][name]__[local]--[hash:base64:5]'
-            }
+            },
+            localsConvention: 'camelCaseOnly'
           }
         },
         'postcss-loader',
