@@ -27,7 +27,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               outputPath: utils.assetsPath('images'),
-              name: '[name].[ext]?[hash:5]'
+              name: '[name]-[hash:5].[ext]'
             }
           }
         ]
@@ -38,7 +38,7 @@ module.exports = {
             loader: 'file-loader',
             options: {
               outputPath: utils.assetsPath('medias'),
-              name: '[name].[ext]?[hash:5]'
+              name: '[name]-[hash:5].[ext]'
             }
           }
         ]

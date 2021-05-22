@@ -1,11 +1,10 @@
-import { RouteComponentProps } from 'react-router-dom'
 import { MenuInterface } from '@/component/Layout/interface'
 // store
 import { AppStateInterface } from '@/config'
 
 // view
 export namespace View {
-  export interface Props extends AppStateInterface, RouteComponentProps {
+  export interface Props extends AppStateInterface {
   }
 }
 

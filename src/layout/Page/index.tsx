@@ -1,4 +1,4 @@
-import { withRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { APP_STORE, AppStateInterface } from '@/config'
 import * as actions from './action'
@@ -15,7 +15,8 @@ const Exception404 = withLazy(() => import(
 ))
 
 const LayoutPage: FC<View.Props> = (props) => {
-  const { username, role, loading, location } = props
+  const { username, role, loading } = props
+  const location = useLocation()
   const { pathname } = location
 
   useEffect(() => {
@@ -63,4 +64,4 @@ const mapStateToProps = (state: any) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(LayoutPage))
+export default connect(mapStateToProps)(LayoutPage)
