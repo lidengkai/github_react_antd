@@ -25,13 +25,12 @@ function dealError(code?: number | string) {
 }
 
 function inputLog(obj: any) {
-  const { request, config } = obj
-  const { responseURL } = request
-  const { method, baseURL, data } = config
+  const { config } = obj
+  const { method, baseURL, url, data } = config
   console.log(
     '%c%s',
     'font-weight: 800;color: #3A5;',
-    `[${method.toLocaleUpperCase()}:]${responseURL.replace(new RegExp(`^.*?(${baseURL})`), '$1')}`
+    `[${method.toLocaleUpperCase()}:]${baseURL + url}`
   )
   console.log('%c%s%o', 'text-indent: 1em;font-weight: 600;', 'req:', (str => {
     try {
